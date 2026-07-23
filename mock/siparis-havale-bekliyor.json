@@ -1,0 +1,45 @@
+{
+  "id": "a1b2c3d4-0000-4000-9000-deneme000001",
+  "orderNumber": "1001",
+  "status": "CREATED",
+  "orderPaymentStatus": "WAITING",
+  "currencyCode": "TRY",
+  "totalFinalPrice": 24000.00,
+  "orderedAt": "2026-07-14T09:30:00.000Z",
+  "updatedAt": "2026-07-14T09:30:00.000Z",
+  "customer": {
+    "id": "c1c2c3c4-0000-4000-9000-musteri00001",
+    "email": "deneme.musteri@ikassync.test",
+    "firstName": "Deneme",
+    "lastName": "Müşterisi",
+    "phone": "+905321234567"
+  },
+  "billingAddress": {
+    "firstName": "Deneme",
+    "lastName": "Müşterisi",
+    "company": "",
+    "taxNumber": "",
+    "taxOffice": "",
+    "phone": "+905321234567",
+    "addressLine1": "Deneme Mah. Sınama Sok. No:1",
+    "addressLine2": "",
+    "city": { "name": "İstanbul" },
+    "district": { "name": "Kadıköy" }
+  },
+  "shippingLines": [ { "price": 0 } ],
+  "orderLineItems": [
+    {
+      "id": "11112222-0000-4000-9000-satir0000001",
+      "quantity": 1,
+      "finalPrice": 24000.00,
+      "finalUnitPrice": 24000.00,
+      "variant": {
+        "id": "v1v2v3v4-0000-4000-9000-varyant00001",
+        "sku": "9.01.007.10002",
+        "barcodeList": [],
+        "name": "ISS-100 KUTU KAREKODLAMA MAKİNASI"
+      }
+    }
+  ],
+  "paymentMethods": [ { "type": "MONEY_ORDER", "price": 24000.00 } ]
+}

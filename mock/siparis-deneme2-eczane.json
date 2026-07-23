@@ -1,0 +1,45 @@
+{
+  "id": "a1b2c3d4-0000-4000-9000-deneme000003",
+  "orderNumber": "1003",
+  "status": "CREATED",
+  "orderPaymentStatus": "WAITING",
+  "currencyCode": "TRY",
+  "totalFinalPrice": 1200.00,
+  "orderedAt": "2026-07-15T08:15:00.000Z",
+  "updatedAt": "2026-07-15T08:15:00.000Z",
+  "customer": {
+    "id": "c1c2c3c4-0000-4000-9000-musteri00003",
+    "email": "deneme2.eczane@ikassync.test",
+    "firstName": "Deneme2",
+    "lastName": "Eczanesi",
+    "phone": "+905331112233"
+  },
+  "billingAddress": {
+    "firstName": "Deneme2",
+    "lastName": "Eczanesi",
+    "company": "Deneme2 Eczanesi Ltd. Şti.",
+    "taxNumber": "1234567819",
+    "taxOffice": "Kadıköy",
+    "phone": "+905331112233",
+    "addressLine1": "Eczane Cad. No:42",
+    "addressLine2": "",
+    "city": { "name": "İstanbul" },
+    "district": { "name": "Kadıköy" }
+  },
+  "shippingLines": [ { "price": 0 } ],
+  "orderLineItems": [
+    {
+      "id": "11112222-0000-4000-9000-satir0000003",
+      "quantity": 1,
+      "finalPrice": 1200.00,
+      "finalUnitPrice": 1200.00,
+      "variant": {
+        "id": "f6270c0b-c371-44c3-90d3-86e834ac4411",
+        "sku": "Clg-Klb-100",
+        "barcodeList": [],
+        "name": "Clogger Eczane Web Barındırma Hizmeti"
+      }
+    }
+  ],
+  "paymentMethods": [ { "type": "MONEY_ORDER", "price": 1200.00 } ]
+}

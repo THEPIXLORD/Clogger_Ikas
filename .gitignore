@@ -1,0 +1,11 @@
+# Gizli yapılandırmalar — ASLA commit'lenmez (ikas secret, DB şifresi, webhook anahtarı)
+config.local.php
+kurulum/config.local.SUNUCU.php
+
+# Çalışma dosyaları
+var/*
+!var/OKUBENI.txt
+*.log
+
+# Sistem
+.DS_Store
