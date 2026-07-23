@@ -252,22 +252,47 @@ class WorkcubeWriter
     {
         $sema = $this->ort['siparis_sema'];
         $kk = $this->cfg['kk_tahsilat'];
-        $this->wc->prepare(
-            "INSERT INTO [$sema].CREDIT_CARD_BANK_PAYMENTS
-                (PAYMENT_TYPE_ID, STORE_REPORT_DATE, SALES_CREDIT, NUMBER_OF_INSTALMENT,
-                 ACTION_DETAIL, ACTION_FROM_COMPANY_ID, ACTION_TYPE, PROCESS_CAT,
-                 ORDER_ID, IS_ONLINE_POS, IS_VOID, ACTION_PERIOD_ID,
-                 RECORD_EMP, RECORD_DATE, RECORD_IP)
-             VALUES (?, CAST(? AS datetime), ?, 1, ?, ?, ?, ?, ?, 1, 0, ?, ?, GETDATE(), '127.0.0.1')")
-            ->execute([$kk['payment_type_id'], substr($tarih, 0, 10), round($tutar, 2),
-                       mb_substr($detay, 0, 250), $companyId, $kk['action_type'], $kk['process_cat'],
-                       $wcOrderId, $this->ort['PERIOD_ID'], $this->ort['RECORD_EMP']]);
-        $id = (int)$this->wc->query('SELECT SCOPE_IDENTITY()')->fetchColumn();
-        if (!$id) {
+        $hesapId = $this->ort['kk_banka_hesap_id'] ?? null;   // ör. canlı: 29 (Iyzico)
+        $this->wc->beginTransaction();
+        try {
+            // Belge no: Workcube'ün kendi sayacından (GENERAL_PAPERS, tek satır kilitli artış)
+            $paperNo = null;
+            $onek = $kk['belge_onek'] ?? 'BKKT';
             $st = $this->wc->prepare(
-                "SELECT MAX(CREDITCARD_PAYMENT_ID) FROM [$sema].CREDIT_CARD_BANK_PAYMENTS WHERE ORDER_ID = ?");
-            $st->execute([$wcOrderId]);
-            $id = (int)$st->fetchColumn();
+                "UPDATE [$sema].GENERAL_PAPERS SET CREDITCARD_REVENUE_NUMBER = CREDITCARD_REVENUE_NUMBER + 1
+                  WHERE CREDITCARD_REVENUE_NO = ?");
+            $st->execute([$onek]);
+            if ($st->rowCount() > 0) {
+                $q = $this->wc->prepare(
+                    "SELECT CREDITCARD_REVENUE_NUMBER FROM [$sema].GENERAL_PAPERS WHERE CREDITCARD_REVENUE_NO = ?");
+                $q->execute([$onek]);
+                $paperNo = $onek . '-' . (int)$q->fetchColumn();
+            }
+
+            $this->wc->prepare(
+                "INSERT INTO [$sema].CREDIT_CARD_BANK_PAYMENTS
+                    (PAYMENT_TYPE_ID, STORE_REPORT_DATE, SALES_CREDIT, NUMBER_OF_INSTALMENT,
+                     ACTION_DETAIL, ACTION_FROM_COMPANY_ID, ACTION_TYPE, PROCESS_CAT,
+                     ORDER_ID, IS_ONLINE_POS, IS_VOID, ACTION_PERIOD_ID,
+                     PAPER_NO, ACTION_TO_ACCOUNT_ID, IS_ACCOUNT,
+                     RECORD_EMP, RECORD_DATE, RECORD_IP)
+                 VALUES (?, CAST(? AS datetime), ?, 1, ?, ?, ?, ?, ?, 1, 0, ?, ?, ?, ?, ?, GETDATE(), '127.0.0.1')")
+                ->execute([$kk['payment_type_id'], substr($tarih, 0, 10), round($tutar, 2),
+                           mb_substr($detay, 0, 250), $companyId, $kk['action_type'], $kk['process_cat'],
+                           $wcOrderId, $this->ort['PERIOD_ID'],
+                           $paperNo, $hesapId, $hesapId ? 1 : 0,
+                           $this->ort['RECORD_EMP']]);
+            $id = (int)$this->wc->query('SELECT SCOPE_IDENTITY()')->fetchColumn();
+            if (!$id) {
+                $st = $this->wc->prepare(
+                    "SELECT MAX(CREDITCARD_PAYMENT_ID) FROM [$sema].CREDIT_CARD_BANK_PAYMENTS WHERE ORDER_ID = ?");
+                $st->execute([$wcOrderId]);
+                $id = (int)$st->fetchColumn();
+            }
+            $this->wc->commit();
+        } catch (Throwable $e) {
+            $this->wc->rollBack();
+            throw $e;
         }
         return $id;
     }

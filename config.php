@@ -14,6 +14,7 @@ return array_replace_recursive([
             'PERIOD_ID' => 4, 'COMPANY_STATE' => 41, 'COUNTRY' => 215,
             'COMPANYCAT_ID' => 3, 'OUR_COMPANY_ID' => 1,
             'RECORD_EMP' => 1, 'ORDER_EMPLOYEE_ID' => 1,
+            'kk_banka_hesap_id' => null,   // test ortamında İyzico banka hesabı tanımlı değil
         ],
         'canli' => [
             'hedef_db' => 'erp_visiott', 'siparis_sema' => 'erp_visiott_1',
@@ -21,6 +22,7 @@ return array_replace_recursive([
             'COMPANYCAT_ID' => 3,  // TODO: e-ticaret müşterisi için ayrı kategori — Erdem'le netleşecek
             'OUR_COMPANY_ID' => 1,
             'RECORD_EMP' => 106, 'ORDER_EMPLOYEE_ID' => 106,  // İbrahim Kara — canlı sipariş deseni
+            'kk_banka_hesap_id' => 29,     // ACCOUNTS: Iyzico (108.01) — tahsilatın bağlandığı banka hesabı
         ],
     ],
 
@@ -79,6 +81,7 @@ return array_replace_recursive([
         'payment_type_id' => 1,      // CREDITCARD_PAYMENT_TYPE: İyzico (test ve canlıda 1)
         'process_cat'     => 154,    // SETUP_PROCESS_CAT: Kredi Kartı Tahsilat
         'action_type'     => 'KREDİ KARTI TAHSİLAT',
+        'belge_onek'      => 'BKKT', // GENERAL_PAPERS sayacı: belge no 'BKKT-<sayac+1>' üretilir
     ],
 
     // ikas API
